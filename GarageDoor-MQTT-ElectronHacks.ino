@@ -12,12 +12,12 @@
 
 //Variables
 //Update these with values suitable for your network.
-const char* ssid = "shp";
-const char* password = "fef105ec00";
-const char* mqtt_server = "10.100.100.181";
+const char* ssid = "HESKIS";
+const char* password = "(*)@DAniEL";
+const char* mqtt_server = "xubuntu-mqtt.heskis.local";
 const char* mqtt_topic = "GarageDoor/";
-const char* mqtt_user = "guest";
-const char* mqtt_password = "12345";
+//const char* mqtt_user = "guest";
+//const char* mqtt_password = "12345";
 
 char vInp13 = 0;
 String rx;
@@ -35,9 +35,9 @@ int value = 0;
 
 void setup() {
   pinMode(5, OUTPUT);
-  pinMode(13, INPUT_PULLUP);
+ // pinMode(13, INPUT_PULLUP);
   
-  //pinMode(BUILTIN_LED, OUTPUT);     // Initialize the BUILTIN_LED pin as an output
+  pinMode(BUILTIN_LED, OUTPUT);     // Initialize the BUILTIN_LED pin as an output
   Serial.begin(115200);
   setup_wifi();
   client.setServer(mqtt_server, 1883);
@@ -78,6 +78,9 @@ void callback(char* topic, byte* payload, unsigned int length) {\
   Serial.print(rx);                                //Print the recieved message to serial
   Serial.println();
 
+
+
+/* John's code
   //Evaulate the recieved message to do stuff
   if ((rx == "OpenGarageDoor") && (vInp13 == HIGH))
   {digitalWrite(5, 1);} //Turn the output on / open the door 
@@ -90,6 +93,25 @@ void callback(char* topic, byte* payload, unsigned int length) {\
   delay(1000);                                     //Wait a second
   digitalWrite(5, 0);                              //Turn the output back off   
   delay(1000);                                     //Let Voltage settle before resuming.  
+
+*/
+
+//My Version
+//Evaulate the recieved message to do stuff
+  if (rx == "OpenGarageDoor")
+  {digitalWrite(BUILTIN_LED, 1);} //Turn the output on / open the door 
+  delay(1000);                                     //Wait a second
+  digitalWrite(BUILTIN_LED, 0);                              //Turn the output back off   
+  delay(1000);                                     //Let Voltage settle before resuming.  
+
+  if (rx == "CloseGarageDoor")
+  {digitalWrite(BUILTIN_LED, 1);} //Turn the output on / close the door 
+  delay(1000);                                     //Wait a second
+  digitalWrite(BUILTIN_LED, 0);                              //Turn the output back off   
+  delay(1000);                                     //Let Voltage settle before resuming.  
+
+
+
   
   /*Serial.print("Message arrived [");
   Serial.print(topic);
@@ -115,7 +137,8 @@ void reconnect() {
   while (!client.connected()) {
     Serial.print("Attempting MQTT connection...");
     // Attempt to connect
-    if (client.connect(mqtt_topic,mqtt_user,mqtt_password)) {
+//    if (client.connect(mqtt_topic,mqtt_user,mqtt_password)) {
+    if (client.connect("ESP8266Client")) {
       Serial.println("connected");
       // Once connected, publish an announcement...
       client.publish(mqtt_topic, "hello world");
@@ -136,6 +159,7 @@ void loop() {
     reconnect();
   }
 
+/*
   ///// Evaluate input 13 and send a message if the value changes 
   if (digitalRead(13) != vInp13)
   {
@@ -151,6 +175,8 @@ void loop() {
      Serial.println("TX: DoorClosed");
    }
   }
+ 
+ */
  //Evaluate ADC
  /* iA0 = analogRead(A0); // Read the analog value
   if (Counter >= 150)   // Counter reduces how often we update to help prevent broker spam
