@@ -12,12 +12,14 @@
 
 //Variables
 //Update these with values suitable for your network.
-const char* ssid = "HESKIS";
+const char* ssid = "HESKIS-TRAVEL";
 const char* password = "(*)@DAniEL";
-const char* mqtt_server = "xubuntu-mqtt.heskis.local";
+const char* mqtt_server = "10.29.10.20";
 const char* mqtt_topic = "GarageDoor/";
 //const char* mqtt_user = "guest";
 //const char* mqtt_password = "12345";
+const int relay_Pin = 5;
+
 
 char vInp13 = 0;
 String rx;
@@ -34,7 +36,7 @@ char msg[50];
 int value = 0;
 
 void setup() {
-  pinMode(5, OUTPUT);
+  pinMode(relay_Pin, OUTPUT);
  // pinMode(13, INPUT_PULLUP);
   
   pinMode(BUILTIN_LED, OUTPUT);     // Initialize the BUILTIN_LED pin as an output
@@ -101,13 +103,13 @@ void callback(char* topic, byte* payload, unsigned int length) {\
   if (rx == "OpenGarageDoor")
   {digitalWrite(BUILTIN_LED, 1);} //Turn the output on / open the door 
   delay(1000);                                     //Wait a second
-  digitalWrite(BUILTIN_LED, 0);                              //Turn the output back off   
+  digitalWrite(BUILTIN_LED, 0);                    //Turn the output back off   
   delay(1000);                                     //Let Voltage settle before resuming.  
 
   if (rx == "CloseGarageDoor")
   {digitalWrite(BUILTIN_LED, 1);} //Turn the output on / close the door 
   delay(1000);                                     //Wait a second
-  digitalWrite(BUILTIN_LED, 0);                              //Turn the output back off   
+  digitalWrite(BUILTIN_LED, 0);                    //Turn the output back off   
   delay(1000);                                     //Let Voltage settle before resuming.  
 
 
